@@ -1,22 +1,22 @@
-// sw.js - Service Worker para Alietty Nails
+// sw.js - Service Worker para Erikita Nails
 
-const CACHE_NAME = 'alietty-nails-v1';
+const CACHE_NAME = 'erikita-nails-v1';
 const urlsToCache = [
-  '/aliettynails/',
-  '/aliettynails/index.html',
-  '/aliettynails/admin.html',
-  '/aliettynails/admin-login.html',
-  '/aliettynails/setup-wizard.html',
-  '/aliettynails/editar-negocio.html',
-  '/aliettynails/manifest.json',
-  '/aliettynails/icons/icon-72x72.png',
-  '/aliettynails/icons/icon-96x96.png',
-  '/aliettynails/icons/icon-128x128.png',
-  '/aliettynails/icons/icon-144x144.png',
-  '/aliettynails/icons/icon-152x152.png',
-  '/aliettynails/icons/icon-192x192.png',
-  '/aliettynails/icons/icon-384x384.png',
-  '/aliettynails/icons/icon-512x512.png'
+  '/erikitanails/',
+  '/erikitanails/index.html',
+  '/erikitanails/admin.html',
+  '/erikitanails/admin-login.html',
+  '/erikitanails/setup-wizard.html',
+  '/erikitanails/editar-negocio.html',
+  '/erikitanails/manifest.json',
+  '/erikitanails/icons/icon-72x72.png',
+  '/erikitanails/icons/icon-96x96.png',
+  '/erikitanails/icons/icon-128x128.png',
+  '/erikitanails/icons/icon-144x144.png',
+  '/erikitanails/icons/icon-152x152.png',
+  '/erikitanails/icons/icon-192x192.png',
+  '/erikitanails/icons/icon-384x384.png',
+  '/erikitanails/icons/icon-512x512.png'
 ];
 
 // ============================================
@@ -108,7 +108,7 @@ self.addEventListener('fetch', event => {
           }
           // Si no hay cache y es imagen, devolver icon por defecto
           if (event.request.url.match(/\.(jpg|jpeg|png|gif|svg|webp)$/)) {
-            return caches.match('/aliettynails/icons/icon-192x192.png');
+            return caches.match('/erikitanails/icons/icon-192x192.png');
           }
           return new Response('Error de red', { status: 408 });
         });
@@ -138,6 +138,6 @@ self.addEventListener('message', event => {
   }
 });
 
-console.log('✅ Service Worker configurado para Alietty Nails');
+console.log('✅ Service Worker configurado para Erikita Nails');
 console.log('📦 Cache:', CACHE_NAME);
 console.log('📄 Archivos a cachear:', urlsToCache.length);
