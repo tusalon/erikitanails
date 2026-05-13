@@ -1,29 +1,30 @@
-// sw.js - Service Worker para Diva Habana Nails
+// sw.js - Service Worker para Erikita Nails
 
-const CACHE_NAME = 'divahabananails-v1';
+const CACHE_NAME = 'erikitanails-v25';
 const urlsToCache = [
-  '/divahabananails/',
-  '/divahabananails/index.html',
-  '/divahabananails/admin.html',
-  '/divahabananails/admin-login.html',
-  '/divahabananails/setup-wizard.html',
-  '/divahabananails/editar-negocio.html',
-  '/divahabananails/manifest.json',
-  '/divahabananails/icons/icon-72x72.png',
-  '/divahabananails/icons/icon-96x96.png',
-  '/divahabananails/icons/icon-128x128.png',
-  '/divahabananails/icons/icon-144x144.png',
-  '/divahabananails/icons/icon-152x152.png',
-  '/divahabananails/icons/icon-192x192.png',
-  '/divahabananails/icons/icon-384x384.png',
-  '/divahabananails/icons/icon-512x512.png'
+  '/erikitanails/',
+  '/erikitanails/index.html',
+  '/erikitanails/admin.html',
+  '/erikitanails/admin-login.html',
+  '/erikitanails/calendar.html',
+  '/erikitanails/setup-wizard.html',
+  '/erikitanails/editar-negocio.html',
+  '/erikitanails/manifest.json',
+  '/erikitanails/icons/icon-72x72.png',
+  '/erikitanails/icons/icon-96x96.png',
+  '/erikitanails/icons/icon-128x128.png',
+  '/erikitanails/icons/icon-144x144.png',
+  '/erikitanails/icons/icon-152x152.png',
+  '/erikitanails/icons/icon-192x192.png',
+  '/erikitanails/icons/icon-384x384.png',
+  '/erikitanails/icons/icon-512x512.png'
 ];
 
 // ============================================
 // INSTALACIÓN
 // ============================================
 self.addEventListener('install', event => {
-  console.log('📦 Service Worker instalando...');
+  console.log('📦 📦 Service Worker instalando...');
   self.skipWaiting();
   
   event.waitUntil(
@@ -42,14 +43,14 @@ self.addEventListener('install', event => {
 // ACTIVACIÓN
 // ============================================
 self.addEventListener('activate', event => {
-  console.log('🔄 Service Worker activado, limpiando caches antiguos...');
+  console.log('🔄 🔄 Service Worker activado, limpiando caches antiguos...');
   
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheName !== CACHE_NAME) {
-            console.log('🗑️ Eliminando cache antiguo:', cacheName);
+            console.log('🗑️ 🗑️ Eliminando cache antiguo:', cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -68,11 +69,11 @@ self.addEventListener('fetch', event => {
   // Ignorar peticiones que no sean HTTP
   if (!event.request.url.startsWith('http')) return;
   
-  // ⚡ NO INTERCEPTAR WHATSAPP (ESENCIAL PARA iOS)
+  // ⚡ ⚠️ NO INTERCEPTAR WHATSAPP (ESENCIAL PARA iOS)
   if (event.request.url.includes('wa.me') || 
       event.request.url.includes('api.whatsapp.com') ||
       event.request.url.includes('whatsapp.com')) {
-    console.log('📱 Dejando pasar WhatsApp sin cache');
+    console.log('📱 📱 Dejando pasar WhatsApp sin cache');
     return;
   }
   
@@ -103,12 +104,12 @@ self.addEventListener('fetch', event => {
         // Si falla la red, buscar en cache
         return caches.match(event.request).then(cachedResponse => {
           if (cachedResponse) {
-            console.log('📦 Sirviendo desde cache:', event.request.url);
+            console.log('📦 📦 Sirviendo desde cache:', event.request.url);
             return cachedResponse;
           }
           // Si no hay cache y es imagen, devolver icon por defecto
           if (event.request.url.match(/\.(jpg|jpeg|png|gif|svg|webp)$/)) {
-            return caches.match('/divahabananails/icons/icon-192x192.png');
+            return caches.match('/erikitanails/icons/icon-192x192.png');
           }
           return new Response('Error de red', { status: 408 });
         });
@@ -120,24 +121,24 @@ self.addEventListener('fetch', event => {
 // MANEJO DE MENSAJES
 // ============================================
 self.addEventListener('message', event => {
-  console.log('📨 Mensaje recibido:', event.data);
+  console.log('📨 📄 Mensaje recibido:', event.data);
   
   if (event.data && event.data.type === 'SKIP_WAITING') {
-    console.log('⏩ Saltando waiting...');
+    console.log('⏩ ⏩ Saltando waiting...');
     self.skipWaiting();
   }
   
   if (event.data && event.data.type === 'CLEAR_CACHE') {
-    console.log('🧹 Limpiando todo el cache...');
+    console.log('🧹 🧹 Limpiando todo el cache...');
     caches.keys().then(cacheNames => {
       cacheNames.forEach(cacheName => {
         caches.delete(cacheName);
-        console.log('🗑️ Cache eliminado:', cacheName);
+        console.log('🗑️ 🗑️ Cache eliminado:', cacheName);
       });
     });
   }
 });
 
-console.log('✅ Service Worker configurado para Diva Habana Nails');
+console.log('✅ Service Worker configurado para Erikita Nails');
 console.log('📦 Cache:', CACHE_NAME);
 console.log('📄 Archivos a cachear:', urlsToCache.length);
