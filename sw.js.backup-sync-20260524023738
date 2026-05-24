@@ -1,6 +1,6 @@
 // sw.js - Service Worker para Erikita Nails
 
-const CACHE_NAME = 'erikitanails-v29';
+const CACHE_NAME = 'erikitanails-v25';
 const urlsToCache = [
   '/erikitanails/',
   '/erikitanails/index.html',
