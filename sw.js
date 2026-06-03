@@ -1,6 +1,6 @@
 // sw.js - Service Worker para Erikita Nails
 
-const CACHE_NAME = 'erikitanails-v29';
+const CACHE_NAME = 'erikitanails-v49';
 const urlsToCache = [
   '/erikitanails/',
   '/erikitanails/index.html',
@@ -17,7 +17,16 @@ const urlsToCache = [
   '/erikitanails/icons/icon-152x152.png',
   '/erikitanails/icons/icon-192x192.png',
   '/erikitanails/icons/icon-384x384.png',
-  '/erikitanails/icons/icon-512x512.png'
+  '/erikitanails/icons/icon-512x512.png',
+  '/erikitanails/vendor/react.production.min.js',
+  '/erikitanails/vendor/react-dom.production.min.js',
+  '/erikitanails/vendor/babel.min.js',
+  '/erikitanails/vendor/bcrypt.min.js',
+  '/erikitanails/vendor/tailwind-browser.js',
+  '/erikitanails/vendor/lucide/lucide.css',
+  '/erikitanails/vendor/lucide/lucide.woff2',
+  '/erikitanails/utils/push-config.js',
+  '/erikitanails/utils/push-notifications.js'
 ];
 
 // ============================================
@@ -137,6 +146,51 @@ self.addEventListener('message', event => {
       });
     });
   }
+});
+
+// ============================================
+// WEB PUSH OPCIONAL
+// ============================================
+self.addEventListener('push', event => {
+  let payload = {};
+
+  try {
+    payload = event.data ? event.data.json() : {};
+  } catch (error) {
+    payload = {
+      title: 'RservasRoma',
+      body: event.data ? event.data.text() : 'Tienes una nueva notificación'
+    };
+  }
+
+  const title = payload.title || 'RservasRoma';
+  const options = {
+    body: payload.body || 'Tienes una nueva notificación',
+    icon: '/erikitanails/icons/icon-192x192.png',
+    badge: '/erikitanails/icons/icon-96x96.png',
+    tag: payload.tag || 'rservasroma',
+    data: {
+      url: payload.url || '/erikitanails/admin.html',
+      ...(payload.data || {})
+    }
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+
+  const targetUrl = event.notification?.data?.url || '/erikitanails/admin.html';
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
+      for (const client of clientList) {
+        if (client.url.includes(targetUrl) && 'focus' in client) return client.focus();
+      }
+      if (clients.openWindow) return clients.openWindow(targetUrl);
+      return null;
+    })
+  );
 });
 
 console.log('✅ Service Worker configurado para Erikita Nails');
